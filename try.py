@@ -26,19 +26,21 @@ class genItem:
 
 
 #array di prefissi per titolo      
-prefTitle = {re.compile('productTitle*'), re.compile('title*'), re.compile('productTitle*')}
+prefTitle = [re.compile('productTitle*'), re.compile('title*'), re.compile('productTitle*')]
 
 #array di prefissi per price nuovo
-prefNewPrice = {re.compile('productTitle*'), re.compile('title*'), re.compile('productTitle*')}
+prefNewPrice = [re.compile('productTitle*'), re.compile('title*'), re.compile('productTitle*')]
 
 
-def soupTitleFinder(soup, pref):
-    count = 0;
-    nPref = 0;
-    while (count < 10):
-        title = soup.find(id = prefTitle[nPref])
-    
-    return 
+def soupTitleFinder(soup):
+    i = 0;
+    # len(array) = length of an array in Python
+    while (i < len(prefTitle)):
+        title = soup.find(id = prefTitle[i])
+        if title is None:
+            i = i+1
+        else:
+            return title
     
 
 #insert a basic item (non book)
@@ -47,16 +49,11 @@ def addGeneralLink(link):
     page = requests.get(link, headers=headers)
     soup = BeautifulSoup(page.content, 'html.parser')
     #se ci sono tanti modelli posso usare un array di espressioni regolari per ciascun tipo
-    pref = re.compile('productTitle*')
-    
     
     #search title string
-    title = soupTitleFinder(soup, pref)
+    title = soupTitleFinder(soup)
     
     print (title.get_text())
-    if title is None:
-        print("xd")
-
 
 # add an entire list of items
 
@@ -71,3 +68,13 @@ def addListOfItems(domain, link):
 
 # addListOfItems("it", link)
 addGeneralLink(link)
+
+
+#TEST
+# page = requests.get(link, headers=headers)
+# soup = BeautifulSoup(page.content, 'html.parser')
+# #se ci sono tanti modelli posso usare un array di espressioni regolari per ciascun tipo
+
+# #search title string
+# title = soup.find(id = "productTitle")
+# print(title)
