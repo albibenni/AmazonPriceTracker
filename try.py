@@ -29,7 +29,7 @@ class genItem:
 prefTitle = [re.compile('productTitle*'), re.compile('title*'), re.compile('productTitle*')]
 
 #array di prefissi per price nuovo
-prefNewPrice = [re.compile('productTitle*'), re.compile('title*'), re.compile('productTitle*')]
+prefNewPrice = [re.compile('priceblock_ourprice'), re.compile('title*'), re.compile('productTitle*')]
 
 
 def soupTitleFinder(soup):
@@ -41,7 +41,16 @@ def soupTitleFinder(soup):
             i = i+1
         else:
             return title
+        
+def soupPriceFinder(soup):
+    i = 0;
     
+    while(i < len(prefNewPrice)):
+        price = soup.find (id = prefNewPrice[i])
+        if price is None:
+            i = i+1
+        else:
+            return price    
 
 #insert a basic item (non book)
 def addGeneralLink(link):    
@@ -67,14 +76,20 @@ def addListOfItems(domain, link):
         elements.append("https://www.amazon." + domain + el['href'])
 
 # addListOfItems("it", link)
-addGeneralLink(link)
+# addGeneralLink(link)
 
 
-#TEST
-# page = requests.get(link, headers=headers)
-# soup = BeautifulSoup(page.content, 'html.parser')
+# TEST
+page = requests.get(link, headers=headers)
+soup = BeautifulSoup(page.content, 'html.parser')
 # #se ci sono tanti modelli posso usare un array di espressioni regolari per ciascun tipo
 
 # #search title string
 # title = soup.find(id = "productTitle")
 # print(title)
+price = soupPriceFinder(soup)
+str = "asd10 4.5"
+for s in str.split():
+    if s.isdigit():
+        print (s)
+# print(price)
